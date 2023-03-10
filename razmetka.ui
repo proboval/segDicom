@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1276</width>
+    <height>916</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="open_">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>40</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Открыть исследование</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="marker_set">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>501</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="duplicatesEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <item>
+     <property name="text">
+      <string>кровоизлияние (в вещество мозга, в оболочки, субарахноидальное)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>хроническая ишемия (глиоз, очаги ДЭП)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>кистозно-глиозные изменения (рубец)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>киста</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>опухоль</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>острая ишемия (инсульт)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>лейкоареоз</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>демиелинезация</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>перифокальный отек</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="select_area">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Добавить область</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="del_area">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>281</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить выбранную область</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="back_">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Назад</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="count_area">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>160</y>
+      <width>42</width>
+      <height>51</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="next">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>100</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Далее</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="countMRT_">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>10</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="MRT">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>60</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>МРТ</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="KT">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>80</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>КТ</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="PET_KT">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>100</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ПЭТ КТ</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="contrasting">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>140</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>С контрастированием</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="no_contrasting">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>160</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Без контрастирования</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save_">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>40</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сохранить данные</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="area_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>331</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
