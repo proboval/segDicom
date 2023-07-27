@@ -1,7 +1,10 @@
+import json
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPainter, QColor, QPen, QBrush, QPixmap, QImage
 from PyQt5.QtCore import Qt, QPoint, QRect
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets, QtGui
+import asyncio
 from razmetka import Ui_MainWindow
 import pydicom
 import copy
@@ -15,8 +18,8 @@ from PIL import Image
 class mywindow(QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
-        self.color = [Qt.yellow, Qt.blue, Qt.red, Qt.green, Qt.magenta, Qt.cyan, QColor(175, 80, 95),
-                      QColor(99, 70, 185), QColor(216, 140, 39)]
+        self.color = [Qt.yellow, Qt.blue, Qt.red, Qt.green, Qt.magenta, Qt.cyan, QtGui.QColor(175, 80, 95),
+                      QtGui.QColor(99, 70, 185), QtGui.QColor(216, 140, 39)]
         self.markSet = ['кровоизлияние (в вещество мозга, в оболочки, субарахноидальное)',
                         'хроническая ишемия (глиоз, очаги ДЭП)',
                         'кистозно-глиозные изменения (рубец)',
@@ -33,6 +36,7 @@ class mywindow(QMainWindow):
         self.dirlist = ''
         self.newDirList = ''
         self.drawMRT = False
+        self.inf_patient = {}
         self.arrPoint = []
         self.tempArrPoint = []
         self.flagArr = []
@@ -86,26 +90,27 @@ class mywindow(QMainWindow):
 
     def del_area(self):
         try:
-            count = self.ui.count_area.value()
-            self.colorArr[self.count].pop(count - 1)
-            self.arrPoint[self.count].pop(count - 1)
-            self.ui.area_label.setText('')
-            txt = ''
-            for i in range(len(self.arrPoint[self.count])):
-                txt += f'{i+1}) {self.markSet[self.colorArr[self.count][i]]} \n'
-            self.ui.area_label.setText(txt)
-            lg = self.ui.area_label.geometry()
-            lg.setHeight(lg.height() - 21)
-            self.ui.area_label.setGeometry(lg)
+            row = self.ui.tableWidget.currentRow()
+            self.colorArr[self.count].pop(row)
+            self.arrPoint[self.count].pop(row)
+            if row > -1:
+                self.ui.tableWidget.removeRow(row)
+                self.ui.tableWidget.selectionModel().clearCurrentIndex()
+            geometry = self.ui.tableWidget.geometry()
+            geometry.setHeight(geometry.height() - 41)
+            self.ui.tableWidget.setGeometry(geometry)
             self.update()
         except:
             pass
 
     def select_area(self):
-        self.colorArr[self.count].append(self.ui.marker_set.currentIndex())
-        self.tempArrPoint = []
-        self.rClick = True
-        self.countClick = 0
+        try:
+            self.colorArr[self.count].append(self.ui.marker_set.currentIndex())
+            self.tempArrPoint = []
+            self.rClick = True
+            self.countClick = 0
+        except:
+            pass
 
     def mousePressEvent(self, event):
         if self.rClick and self.countClick < 4:
@@ -118,13 +123,23 @@ class mywindow(QMainWindow):
             self.countClick = 0
             self.arrPoint[self.count].append(self.tempArrPoint)
             self.tempArrPoint = []
-            txt = ''
-            for i in range(len(self.arrPoint[self.count])):
-                txt += f'{i + 1}) {self.markSet[self.colorArr[self.count][i]]}\n'
-            self.ui.area_label.setText(txt)
-            lg = self.ui.area_label.geometry()
-            lg.setHeight(lg.height() + 21)
-            self.ui.area_label.setGeometry(lg)
+            row = self.ui.tableWidget.rowCount()
+            row += 1
+            self.ui.tableWidget.setRowCount(row)
+            geometry = self.ui.tableWidget.geometry()
+            geometry.setHeight(geometry.height() + 41)
+            self.ui.tableWidget.setGeometry(geometry)
+            row_ = self.ui.tableWidget.rowCount()
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(self.markSet[self.colorArr[self.count][-1]])
+            self.ui.tableWidget.setItem(row_-1,0,item)
+            item = QtWidgets.QTableWidgetItem()
+            brush = QtGui.QBrush(self.color[self.colorArr[self.count][-1]])
+            brush.setStyle(QtCore.Qt.SolidPattern)
+            item.setBackground(brush)
+            self.ui.tableWidget.setItem(row_-1,1,item)
+            brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+            brush.setStyle(QtCore.Qt.NoBrush)
 
     def initUI(self):
         self.setWindowTitle("Разметка")
@@ -137,17 +152,19 @@ class mywindow(QMainWindow):
                 for k in range(len(self.arrPoint[i][j])):
                     self.arrPoint[i][j][k].setX(self.arrPoint[i][j][k].x() - (size.width() // 2 - (512 // 2)))
                     self.arrPoint[i][j][k].setY(self.arrPoint[i][j][k].y() - ((size.height() - 61) // 2 - (512 // 2)))
-        with open(self.dirlist+'\\segRez.txt', 'w', encoding="utf-8") as file:
-            for i in range(len(self.arrPoint)):
-                print(f'Снимок {i + 1}', file=file, end = '\n')
-                for j in range(len(self.arrPoint[i])):
-                    print(str(self.arrPoint[i][j]).replace("PyQt5.QtCore.QPoint", '') + ' - '
-                          + str(self.markSet[self.colorArr[i][j]]), file=file, end = '\n')
-                print('(' + self.flagArr[i][0] + ' ' + self.flagArr[i][1] + ')', file=file, end='\n')
-                if len(self.arrPoint[i]) == 0:
-                    print('Патологии не обнаружены', file=file, end='\n')
-                print('\n', file=file, end = '\n')
+        for i in range(len(self.arrPoint)):
+            self.inf_patient[i] = {}
+            self.inf_patient[i]['arrPathology'] = {}
+            self.inf_patient[i]['flagArr'] = self.flagArr[i]
+            for j in range(len(self.arrPoint[i])):
+                self.inf_patient[i]['arrPathology'][f'pathologyPoint{j}'] = [{'x': point.x(), 'y': point.y()} for point in self.arrPoint[i][j]]
+                self.inf_patient[i]['arrPathology'][f'pathologyName{j}'] = self.markSet[self.colorArr[i][j]]
+
+        with open(self.dirlist+'\\segRez.json', 'w', encoding="utf-8") as file:
+            json.dump(self.inf_patient, file, ensure_ascii=False)
+
         shutil.rmtree(self.newDirList)
+        self.inf_patient.clear()
         self.count = 0
         self.countMRT = 0
         self.dirlist = ''
@@ -155,10 +172,10 @@ class mywindow(QMainWindow):
         self.arrPoint = []
         self.tempArrPoint = []
         self.invFlag()
-        self.ui.area_label.setText('')
-        lg = self.ui.area_label.geometry()
-        lg.setHeight(21)
-        self.ui.area_label.setGeometry(lg)
+        self.ui.tableWidget.setRowCount(0)
+        geometry = self.ui.tableWidget.geometry()
+        geometry.setHeight(41)
+        self.ui.tableWidget.setGeometry(geometry)
         self.drawMRT = False
         self.ui.countMRT_.setText('Сохранение прошло успешно')
 
@@ -182,13 +199,15 @@ class mywindow(QMainWindow):
             self.ui.no_contrasting.setChecked(True)
 
     def keyPressEvent(self, event):
-        if self.countMRT > 0:
+        if self.countMRT > 0 and self.drawMRT:
             if event.key() == QtCore.Qt.Key_D:
                 self.next()
             elif event.key() == QtCore.Qt.Key_A:
                 self.back()
             elif event.key() == QtCore.Qt.Key_E:
                 self.select_area()
+            elif event.key() == QtCore.Qt.Key_Delete:
+                self.del_area()
 
     def next(self):
         if self.countMRT > 0:
@@ -198,14 +217,22 @@ class mywindow(QMainWindow):
                 self.count += 1
                 name = self.dirlist.split('/')[-2]
                 self.ui.countMRT_.setText(f"{name}, Снимок {self.count + 1} из {self.countMRT}")
-                txt = ''
+                self.ui.tableWidget.setRowCount(0)
+                geometry = self.ui.tableWidget.geometry()
+                geometry.setHeight(41 * (len(self.arrPoint[self.count]) + 1))
+                self.ui.tableWidget.setGeometry(geometry)
+                self.ui.tableWidget.setRowCount(len(self.arrPoint[self.count]))
                 for i in range(len(self.arrPoint[self.count])):
-                    txt += f'{i + 1}) {self.markSet[self.colorArr[self.count][i]]} \n'
-                self.ui.area_label.setText(txt)
-                lg = self.ui.area_label.geometry()
-                n = 21 * len(self.colorArr[self.count])
-                lg.setHeight(n)
-                self.ui.area_label.setGeometry(lg)
+                    item = QtWidgets.QTableWidgetItem()
+                    item.setText(self.markSet[self.colorArr[self.count][i]])
+                    self.ui.tableWidget.setItem(i, 0, item)
+                    item = QtWidgets.QTableWidgetItem()
+                    brush = QtGui.QBrush(self.color[self.colorArr[self.count][i]])
+                    brush.setStyle(QtCore.Qt.SolidPattern)
+                    item.setBackground(brush)
+                    self.ui.tableWidget.setItem(i, 1, item)
+                    brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+                    brush.setStyle(QtCore.Qt.NoBrush)
                 self.invFlag()
                 self.setFlag()
                 tempArr = copy.deepcopy(self.arrPoint)
@@ -238,23 +265,28 @@ class mywindow(QMainWindow):
                 self.count -= 1
                 name = self.dirlist.split('/')[-2]
                 self.ui.countMRT_.setText(f"{name}, Снимок {self.count + 1} из {self.countMRT}")
-                txt = ''
+                self.ui.tableWidget.setRowCount(0)
+                geometry = self.ui.tableWidget.geometry()
+                geometry.setHeight(41 * (len(self.arrPoint[self.count]) + 1))
+                self.ui.tableWidget.setGeometry(geometry)
+                self.ui.tableWidget.setRowCount(len(self.arrPoint[self.count]))
                 for i in range(len(self.arrPoint[self.count])):
-                    txt += f'{i + 1}) {self.markSet[self.colorArr[self.count][i]]} \n'
-                self.ui.area_label.setText(txt)
-                lg = self.ui.area_label.geometry()
-                n = 21 * len(self.colorArr[self.count])
-                lg.setHeight(n)
-                self.ui.area_label.setGeometry(lg)
+                    item = QtWidgets.QTableWidgetItem()
+                    item.setText(self.markSet[self.colorArr[self.count][i]])
+                    self.ui.tableWidget.setItem(i, 0, item)
+                    item = QtWidgets.QTableWidgetItem()
+                    brush = QtGui.QBrush(self.color[self.colorArr[self.count][i]])
+                    brush.setStyle(QtCore.Qt.SolidPattern)
+                    item.setBackground(brush)
+                    self.ui.tableWidget.setItem(i, 1, item)
+                    brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+                    brush.setStyle(QtCore.Qt.NoBrush)
                 self.invFlag()
                 self.setFlag()
                 self.update()
 
-    def open_(self):
+    async def tryOpenFile(self):
         try:
-            self.dirlist = QFileDialog.getExistingDirectory(self, "Выбрать папку", ".")
-            with open("История.txt", 'a', encoding="utf-8") as file:
-                print(str(self.dirlist), file=file, sep='\n')
             self.count = 0
             self.tempArrPoint = []
             self.newDirList = self.dirlist + 'new'
@@ -272,21 +304,48 @@ class mywindow(QMainWindow):
                     final_image.save(self.newDirList + '\\' + dirName[:-4] + 'new.png')
             except:
                 pass
-            self.drawMRT = True
-            name = self.dirlist.split('/')[-2]
-            self.ui.countMRT_.setText(f"{name}, Снимок 1 из {self.countMRT}")
-            self.arrPoint = [[] for i in range(self.countMRT)]
-            self.colorArr = [[] for i in range(self.countMRT)]
-            self.flagArr = [['', ''] for i in range(self.countMRT)]
-            os.mkdir(self.dirlist + '\\segRez')
-            self.segRez = self.dirlist + '\\segRez'
         except:
-            self.ui.countMRT_.setText(f"Ошибка")
+            pass
+
+    async def tryCountFile(self):
+        count = 0
+        self.ui.countMRT_.setText(f"Загрузилось {count} снимков")
+        await asyncio.sleep(1)
+        while count != self.countMRT:
+            self.ui.countMRT_.setText(f"Загрузилось {count} снимков")
+            count = self.countMRT
+            await asyncio.sleep(1)
+
+    def open_(self):
+        self.dirlist = QFileDialog.getExistingDirectory(self, "Выбрать папку", ".")
+        with open("История.txt", 'a', encoding="utf-8") as file:
+            print(str(self.dirlist), file=file, sep='\n')
+        if self.dirlist != '':
+
+            open_ = [
+                asyncio.ensure_future(self.tryCountFile()),
+                asyncio.ensure_future(self.tryOpenFile())
+                ]
+            event_loop = asyncio.get_event_loop()
+            event_loop.run_until_complete(asyncio.gather(*open_))
+            try:
+                self.drawMRT = True
+                name = self.dirlist.split('/')[-2]
+                self.ui.countMRT_.setText(f"{name}, Снимок 1 из {self.countMRT}")
+                self.arrPoint = [[] for i in range(self.countMRT)]
+                self.colorArr = [[] for i in range(self.countMRT)]
+                self.flagArr = [['', ''] for i in range(self.countMRT)]
+                os.mkdir(self.dirlist + '\\segRez')
+                self.segRez = self.dirlist + '\\segRez'
+            except:
+                self.ui.countMRT_.setText(f"Ошибка")
 
     def paintEvent(self, e):
         qp = QPainter()
         size = self.size()
         qp.begin(self)
+
+        qp.drawRect(size.width() // 2 - (512 // 2) - 10, (size.height() - 61) // 2 - (512 // 2) - 10, 532, 532)
         if self.drawMRT:
             k = 0
             tempfile = ''

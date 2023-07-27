@@ -3,3 +3,93 @@ C:/Users/Saveliy/Desktop/Сегментация изображения голо�
 
 C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
 C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+
+C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+
+C:/Users/Saveliy/Desktop/Name9/2022-02-09 103806_001
+C:/Users/Saveliy/Desktop/Сегментация изображения головного мозга/Name1234/10_02_2022_14_44_07
+C:/Users/Saveliy/Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Desktop/Name3/2022-03-02 144644_001
+
+C:/Users/Saveliy/Desktop/Name3/2022-03-02 144644_001
+C:/Users/Saveliy/Desktop/2022-05-12 093059_001
+
+C:/Users/Saveliy/Desktop/Name 78/2022-05-12 093059_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001/segRez
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+        self.tableWidget.setColumnWidth(1, 40)
+        self.tableWidget.setColumnWidth(0, 260)
+        item = QtWidgets.QTableWidgetItem()
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        item.setBackground(brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush.setStyle(QtCore.Qt.NoBrush)
+        item.setForeground(brush)C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001/segRez
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Downloads/Telegram Desktop/Name1/2021-11-07 112823_001
+C:/Users/Saveliy/Desktop/Name6/2022-05-12 093059_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
+C:/Users/Saveliy/Desktop/Name533(Готово)/2021-09-28 142204_001
