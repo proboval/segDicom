@@ -51,51 +51,6 @@
     <property name="frame">
      <bool>true</bool>
     </property>
-    <item>
-     <property name="text">
-      <string>кровоизлияние (в вещество мозга, в оболочки, субарахноидальное)</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>хроническая ишемия (глиоз, очаги ДЭП)</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>кистозно-глиозные изменения (рубец)</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>киста</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>опухоль</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>острая ишемия (инсульт)</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>лейкоареоз</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>демиелинезация</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>перифокальный отек</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="select_area">
     <property name="geometry">
@@ -115,7 +70,7 @@
      <rect>
       <x>10</x>
       <y>160</y>
-      <width>281</width>
+      <width>331</width>
       <height>51</height>
      </rect>
     </property>
@@ -134,16 +89,6 @@
     </property>
     <property name="text">
      <string>Назад</string>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="count_area">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>160</y>
-      <width>42</width>
-      <height>51</height>
-     </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="next">
@@ -272,7 +217,7 @@
       <x>10</x>
       <y>220</y>
       <width>331</width>
-      <height>81</height>
+      <height>41</height>
      </rect>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
@@ -289,7 +234,7 @@
      </property>
     </column>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="new_mark_line">
     <property name="geometry">
      <rect>
       <x>520</x>
@@ -313,6 +258,52 @@
     </property>
    </widget>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1276</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="markers">
+    <property name="title">
+     <string>Маркеры</string>
+    </property>
+    <addaction name="save_marker_list"/>
+    <addaction name="open_marker_list"/>
+   </widget>
+   <widget class="QMenu" name="files">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="save_files"/>
+    <addaction name="open_files"/>
+   </widget>
+   <addaction name="markers"/>
+   <addaction name="files"/>
+  </widget>
+  <action name="save_marker_list">
+   <property name="text">
+    <string>Сохранить список маркеров</string>
+   </property>
+  </action>
+  <action name="open_marker_list">
+   <property name="text">
+    <string>Открыть список маркеров</string>
+   </property>
+  </action>
+  <action name="save_files">
+   <property name="text">
+    <string>Сохранить данные</string>
+   </property>
+  </action>
+  <action name="open_files">
+   <property name="text">
+    <string>Открыть исследование</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

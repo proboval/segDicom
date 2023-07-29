@@ -1,4 +1,5 @@
 import json
+import random
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPainter, QColor, QPen, QBrush, QPixmap, QImage
@@ -15,17 +16,21 @@ import shutil
 from PIL import Image
 
 
+def generate_color():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+
+    return red, green, blue
+
+
 class mywindow(QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
-        self.color = [Qt.yellow, Qt.blue, Qt.red, Qt.green, Qt.magenta, Qt.cyan, QtGui.QColor(175, 80, 95),
-                      QtGui.QColor(99, 70, 185), QtGui.QColor(216, 140, 39)]
-        self.markSet = ['кровоизлияние (в вещество мозга, в оболочки, субарахноидальное)',
-                        'хроническая ишемия (глиоз, очаги ДЭП)',
-                        'кистозно-глиозные изменения (рубец)',
-                        'киста', 'опухоль', 'острая ишемия (инсульт)',
-                        'лейкоареоз', 'демиелинезация', 'перифокальный отек']
+        self.color = []
+        self.markSet = []
         self.comment = []
+        self.tempfile = ''
         self.segRez = ''
         self.image = None
         self.countClick = 0
@@ -54,6 +59,51 @@ class mywindow(QMainWindow):
         self.ui.PET_KT.stateChanged.connect(self.state_changed_PRT_KT)
         self.ui.contrasting.stateChanged.connect(self.state_changed_contrasting)
         self.ui.no_contrasting.stateChanged.connect(self.state_changed_no_contrasting)
+        self.ui.create_new_mark.clicked.connect(lambda: self.create_new_mark_())
+        self.ui.save_marker_list.triggered.connect(self.save_markers_)
+        self.ui.open_marker_list.triggered.connect(self.open_markers_)
+
+    def open_markers_(self):
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getOpenFileName(self, "Открыть файл, содержащий маркеры", "", "JSON-файл (*.json);;Все файлы (*)",
+                                                   options=options)
+        if file_name:
+            with open(file_name, 'r', encoding='utf-8') as file:
+                try:
+                    data = json.load(file)
+                    keys = data.keys()
+                    self.color.clear()
+                    self.markSet.clear()
+                    self.ui.marker_set.clear()
+                    for key in keys:
+                        self.markSet.append(key)
+                        self.color.append(QColor(data[key]['red'], data[key]['green'], data[key]['blue']))
+                        self.ui.marker_set.addItem(key)
+                except json.JSONDecodeError:
+                    print('Ошибка декодирования JSON файла.')
+
+
+    def save_markers_(self):
+        markers_dict = {}
+        for i in range(len(self.markSet)):
+            markers_dict[self.markSet[i]] = {}
+            markers_dict[self.markSet[i]]['red'] = QColor(self.color[i]).red()
+            markers_dict[self.markSet[i]]['green'] = QColor(self.color[i]).green()
+            markers_dict[self.markSet[i]]['blue'] = QColor(self.color[i]).blue()
+
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getSaveFileName(None, "Сохранить файл", "", "JSON-файл (*.json);;Все файлы (*)",
+                                                   options=options)
+        if file_name:
+            with open(f'{file_name}', 'w', encoding="utf-8") as file:
+                json.dump(markers_dict, file, ensure_ascii=False)
+
+    def create_new_mark_(self):
+        self.markSet.append(self.ui.new_mark_line.text())
+        r, g, b = generate_color()
+        self.color.append(QtGui.QColor(r, g, b))
+        self.ui.marker_set.addItem(self.ui.new_mark_line.text())
+        self.ui.new_mark_line.setText('')
 
     def state_changed_contrasting(self, int):
         if self.ui.contrasting.isChecked():
@@ -211,6 +261,12 @@ class mywindow(QMainWindow):
 
     def next(self):
         if self.countMRT > 0:
+            size = self.size()
+            rect = QRect(size.width() // 2 - (512 // 2), (size.height() - 61) // 2 - (512 // 2), 512, 512)
+            pix = QPixmap(self.size())
+            self.render(pix)
+            newPix = pix.copy(rect)
+            newPix.save(f'{self.segRez}\\{self.tempfile[:-4]}.png', 'png')
             self.rClick = False
             self.tempArrPoint = []
             if self.count + 1 != self.countMRT:
@@ -348,14 +404,14 @@ class mywindow(QMainWindow):
         qp.drawRect(size.width() // 2 - (512 // 2) - 10, (size.height() - 61) // 2 - (512 // 2) - 10, 532, 532)
         if self.drawMRT:
             k = 0
-            tempfile = ''
+            self.tempfile = ''
             for fileName in os.listdir(self.newDirList):
                 if k == self.count:
                     self.image = QImage(self.newDirList + '\\' + fileName)
                     rect = QRect(size.width() // 2 - (512 // 2), (size.height() - 61) // 2 - (512 // 2), 512, 512)
                     pixmap = QImage(self.newDirList + '\\' + fileName)
                     qp.drawImage(rect, pixmap)
-                    tempfile = fileName
+                    self.tempfile = fileName
                     break
                 k += 1
             if self.tempArrPoint != []:
@@ -366,12 +422,6 @@ class mywindow(QMainWindow):
             for i in range(len(self.arrPoint[self.count])):
                 qp.setPen(self.color[self.colorArr[self.count][i]])
                 qp.drawPolygon(self.arrPoint[self.count][i])
-            rect = QRect(size.width() // 2 - (512 // 2), (size.height() - 61) // 2 - (512 // 2), 512, 512)
-            pix = QPixmap(self.size())
-            self.render(pix)
-            newPix = pix.copy(rect)
-            newPix.save(f'{self.segRez}\\{tempfile[:-4]}.png', 'png')
-
         qp.end()
 
 
